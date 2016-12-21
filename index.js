@@ -7,4 +7,12 @@ app.use(express.static('public'));
 app.use(cookieParser());
 
 app.listen(3000, () => console.log('Server started'));
-app.get('/', (req, res) => res.render('home'));
+app.get('/', (req, res) => {
+  res.cookie('username', 'Pho');
+  res.render('home')
+});
+
+app.get('/show', (req, res) => {
+  console.log(req.cookies);
+  res.send('Hello');
+});
