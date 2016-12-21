@@ -32,7 +32,7 @@ function queryDB(sql, cb){
   });
 }
 
-function inserUser(username, password, phone, image, cb) {
+function insertUser(username, password, phone, image, cb) {
   var loi;
   sql = `INSERT INTO "User"(username, password, phone, image)
         VALUES ('${username}', '${encrypt(password)}', '${phone}', '${image}')`;
@@ -99,6 +99,4 @@ function updateUser(username, phone, image, password, cb){
   });
 }
 
-inserUser('huong', '123', '01694472176', '1.jpg', () => {});
-
-module.exports = {checkLogin, inserUser, checkUsernameExist, getUser, updateUser};
+module.exports = {checkLogin, insertUser, checkUsernameExist, getUser, updateUser};
