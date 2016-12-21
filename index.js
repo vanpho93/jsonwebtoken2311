@@ -6,9 +6,11 @@ app.set('views', './views');
 app.use(express.static('public'));
 app.use(cookieParser());
 var parser = require('body-parser').urlencoded({extended: false});
-var {sign, decode, getNewToken} = require('./token.js');
-var {checkLogin} = require('./db.js');
 app.listen(3000, () => console.log('Server started'));
+app.use(require('./middleware.js'));
+app.get('/dangnhap', require('./controler/dangnhap.js'));
+app.get('/giaodich', require('./controler/giaodich.js'));
+app.post('/xulydangnhap', parser, require('./controler/xulydangnhap.js'));
 
 // app.get('/', (req, res) => {
 //   res.cookie('username', 'Pho');
@@ -39,33 +41,3 @@ app.listen(3000, () => console.log('Server started'));
   // }
 //   res.send(dec);
 // })
-
-app.get('/dangnhap', (req, res) => {
-  var dec = decode(req.cookies.user_cookie);
-  if(typeof dec != 'object'){
-    return res.render('dangnhap');
-  }
-  res.cookie('user_cookie',getNewToken(dec));
-  res.redirect('/giaodich');
-});
-
-
-app.get('/giaodich', (req, res) => {
-  var dec = decode(req.cookies.user_cookie);
-  if(typeof dec == 'object'){
-    return res.render('giaodich');
-  }
-  res.redirect('/dangnhap');
-});
-
-
-app.post('/xulydangnhap', parser, (req, res) => {
-  var {username, password} = req.body;
-  checkLogin(username, password, err => {
-    if(err){
-      return res.send('Dang nhap that bai ' + err);
-    }
-    res.cookie('user_cookie', sign({username, password}));
-    res.redirect('/giaodich');
-  })
-});
