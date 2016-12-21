@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 var SECRET_KEY = 'ge5$8n3e28)&^ehdhgcdw233';
 
 function sign(obj){
-  return jwt.sign(obj, SECRET_KEY, {expiresIn: 5});
+  return jwt.sign(obj, SECRET_KEY, {expiresIn: 1000});
 }
 // function decode(en){
 //   jwt.verify(en, SECRET_KEY, (err, decoded) => {
@@ -20,7 +20,7 @@ function decode(en){
 }
 
 function getNewToken(obj){
-  obj.exp = Math.floor(Date.now() / 1000 + 5);
+  obj.exp = Math.floor(Date.now() / 1000 + 1000);
   return jwt.sign(obj, SECRET_KEY);
 }
 // var en = sign({name: 'Pho', age: 18});
