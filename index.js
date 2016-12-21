@@ -39,19 +39,26 @@ app.listen(3000, () => console.log('Server started'));
   // }
 //   res.send(dec);
 // })
-app.use((req, res, next) => {
-  if(!req.cookies.user_cookie){
-    return res.redirect("/dangnhap");
+
+app.get('/dangnhap', (req, res) => {
+  var dec = decode(req.cookies.user_cookie);
+  if(typeof dec != 'object'){
+    return res.render('dangnhap');
   }
+  res.cookie('user_cookie',getNewToken(dec));
+  res.redirect('/giaodich');
+});
+
+
+app.get('/giaodich', (req, res) => {
   var dec = decode(req.cookies.user_cookie);
   if(typeof dec == 'object'){
-    res.cookie('token',getNewToken(dec));
-    res.redirect("/giaodich");
+    return res.render('giaodich');
   }
-  res.redirect("/dangnhap");
+  res.redirect('/dangnhap');
 });
-app.get('/dangnhap', (req, res) => res.render('dangnhap'));
-app.get('/giaodich', (req, res) => res.render('giaodich'));
+
+
 app.post('/xulydangnhap', parser, (req, res) => {
   var {username, password} = req.body;
   checkLogin(username, password, err => {
